@@ -14,11 +14,10 @@ format:
       source: true
 ---
 
-
 ```{r}
-
-
-# Načtení potřebných knihoven
+#| filename: 'Načtení knihoven'
+#| warning: false
+#| message: false
 library(tidyverse)
 library(car)      # Pro VIF (multikolinearita) a testy
 library(broom)    # Pro hezké výstupy modelů
@@ -48,7 +47,6 @@ summary(diamonds_clean |> select(price, carat, depth, table))
 head(diamonds_clean)
 ```
 
-
 ```{r}
 ggplot(diamonds_clean, aes(x = carat, y = price, color = cut)) +
   geom_point(alpha = 0.2, size = 1) +
@@ -62,6 +60,3 @@ ggplot(diamonds_clean, aes(x = carat, y = price, color = cut)) +
     color = "Brus (cut)"
   )
 ```
-
-
-
