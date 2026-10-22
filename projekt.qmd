@@ -60,3 +60,7 @@ ggplot(diamonds_clean, aes(x = carat, y = price, color = cut)) +
     color = "Brus (cut)"
   )
 ```
+
+```{r}
+summary(lm(price ~ x + y + z, data=diamonds_clean))
+```
