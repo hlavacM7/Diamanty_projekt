@@ -45,6 +45,11 @@ summary(diamonds_clean |> select(price, carat, depth, table))
 ```
 
 ```{r}
+head(diamonds_clean)
+```
+
+
+```{r}
 ggplot(diamonds_clean, aes(x = carat, y = price, color = cut)) +
   geom_point(alpha = 0.2, size = 1) +
   geom_smooth(method = "loess", se = FALSE, color = "black") +
@@ -57,4 +62,6 @@ ggplot(diamonds_clean, aes(x = carat, y = price, color = cut)) +
     color = "Brus (cut)"
   )
 ```
+
+
 
