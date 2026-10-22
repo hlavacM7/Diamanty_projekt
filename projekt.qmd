@@ -1,0 +1,60 @@
+---
+title: "Projekt Diamanty"
+subtitle: "Projekt"
+author: "MH"
+date: "2026-09-16"
+format: 
+  html: 
+    page-layout: full
+    embed-resources: true
+    toc: true
+    toc-location: left
+    number-sections: true
+    code-tools:
+      source: true
+---
+
+
+```{r}
+
+
+# Načtení potřebných knihoven
+library(tidyverse)
+library(car)      # Pro VIF (multikolinearita) a testy
+library(broom)    # Pro hezké výstupy modelů
+library(knitr)    # Pro přehledné tabulky
+```
+
+```{r}
+diamonds_raw <- read.csv("Diamonds_Prices2022.csv")
+
+# Základní kontrola a čištění dat (odstranění rozměrů x, y, z rovných 0)
+diamonds_clean <- diamonds_raw |>
+  filter(x > 0, y > 0, z > 0)
+
+# Kontrola rozměrů po vyčištění
+cat("Původní počet řádků:", nrow(diamonds_raw), "\n")
+cat("Počet řádků po vyčištění:", nrow(diamonds_clean), "\n")
+```
+
+```{r}
+
+str(diamonds_clean)
+
+summary(diamonds_clean |> select(price, carat, depth, table))
+```
+
+```{r}
+ggplot(diamonds_clean, aes(x = carat, y = price, color = cut)) +
+  geom_point(alpha = 0.2, size = 1) +
+  geom_smooth(method = "loess", se = FALSE, color = "black") +
+  theme_minimal() +
+  labs(
+    title = "Závislost ceny na hmotnosti diamantu",
+    subtitle = "Vztah ",
+    x = "Hmotnost (karáty)",
+    y = "Cena (USD)",
+    color = "Brus (cut)"
+  )
+```
+
