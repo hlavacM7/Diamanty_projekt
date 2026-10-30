@@ -19,36 +19,57 @@ format:
 #| warning: false
 #| message: false
 library(tidyverse)
-library(car)      # Pro VIF (multikolinearita) a testy
-library(broom)    # Pro hezké výstupy modelů
-library(knitr)    # Pro přehledné tabulky
+library(car)      
+library(broom)    
+library(knitr)    
+library(ggplot2)
+library(gridExtra)
+library(corrplot)
 ```
 
 ```{r}
-diamonds_raw <- read.csv("Diamonds_Prices2022.csv")
+df <- read.csv("Diamonds_Prices2022.csv")
+df$X <- NULL
+
 
 # Základní kontrola a čištění dat (odstranění rozměrů x, y, z rovných 0)
-diamonds_clean <- diamonds_raw |>
-  filter(x > 0, y > 0, z > 0)
+df_clean <- df %>% 
+  filter(x > 0 & y > 0 & z > 0, y < 20 & z < 20)
 
 # Kontrola rozměrů po vyčištění
-cat("Původní počet řádků:", nrow(diamonds_raw), "\n")
-cat("Počet řádků po vyčištění:", nrow(diamonds_clean), "\n")
+cat("Původní počet řádků:", nrow(df), "\n")
+cat("Počet řádků po vyčištění:", nrow(df_clean), "\n")
 ```
 
 ```{r}
 
-str(diamonds_clean)
+str(df_clean)
 
-summary(diamonds_clean |> select(price, carat, depth, table))
+summary(df_clean |> select(price, carat, depth, table))
 ```
 
 ```{r}
-head(diamonds_clean)
+df_clean$cut <- factor(df_clean$cut, 
+                       levels = c("Fair", "Good", "Very Good", "Premium", "Ideal"), 
+                       ordered = TRUE)
+
+df_clean$color <- factor(df_clean$color, 
+                         levels = c("J", "I", "H", "G", "F", "E", "D"), 
+                         ordered = TRUE)
+
+df_clean$clarity <- factor(df_clean$clarity, 
+                           levels = c("I1", "SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF"), 
+                           ordered = TRUE)
 ```
 
 ```{r}
-ggplot(diamonds_clean, aes(x = carat, y = price, color = cut)) +
+str(df_clean)
+summary(df_clean)
+```
+
+
+```{r}
+ggplot(df_clean, aes(x = carat, y = price, color = cut)) +
   geom_point(alpha = 0.2, size = 1) +
   geom_smooth(method = "loess", se = FALSE, color = "black") +
   theme_minimal() +
@@ -62,5 +83,50 @@ ggplot(diamonds_clean, aes(x = carat, y = price, color = cut)) +
 ```
 
 ```{r}
-summary(lm(price ~ x + y + z, data=diamonds_clean))
+# Histogram ceny
+ggplot(df_clean, aes(x = price)) +
+  geom_histogram(bins = 50, fill = "steelblue", color = "white") +
+  theme_minimal() +
+  labs(title = "Distribuce ceny", x = "Cena ($)", y = "Počet")
+```
+
+```{r}
+# Carat vs Price
+ggplot(df_clean, aes(x = carat, y = price)) +
+  geom_point(alpha = 0.2, color = "dodgerblue4") +
+  geom_smooth(method = "loess", color = "red") +
+  theme_minimal() +
+  labs(title = "Závislost ceny na počtu karátů", x = "Karáty", y = "Cena ($)")
+
+# log 
+ggplot(df_clean, aes(x = log(carat), y = log(price))) +
+  geom_point(alpha = 0.2, color = "forestgreen") +
+  geom_smooth(method = "lm", color = "red") +
+  theme_minimal() +
+  labs(title = "Log-Log vztah: Karáty vs Cena", x = "log(Karáty)", y = "log(Cena)")
+```
+
+
+```{r}
+#boxplot
+ggplot(df_clean, aes(x = cut, y = price, fill = cut)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Cena podle kvality řezu (Cut)", x = "Kvalita řezu", y = "Cena ($)") +
+  theme(legend.position = "none")
+```
+
+```{r}
+num_vars <- df_clean %>% select(carat, depth, table, price, x, y, z)
+cor_matrix <- cor(num_vars)
+
+# Vykreslení korelačního diagramu
+corrplot(cor_matrix, method = "color", type = "upper", 
+         addCoef.col = "black", tl.col = "black", tl.srt = 45,
+         number.cex = 0.7, title = "Korelační matice numerických proměnných", mar = c(0,0,1,0))
+```
+
+
+```{r}
+summary(lm(price ~ x + y + z, data=df_clean))
 ```
