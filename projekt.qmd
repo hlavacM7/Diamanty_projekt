@@ -25,6 +25,7 @@ library(knitr)
 library(ggplot2)
 library(gridExtra)
 library(corrplot)
+library(GGally)
 ```
 
 ```{r}
@@ -67,7 +68,6 @@ str(df_clean)
 summary(df_clean)
 ```
 
-
 ```{r}
 ggplot(df_clean, aes(x = carat, y = price, color = cut)) +
   geom_point(alpha = 0.2, size = 1) +
@@ -106,15 +106,56 @@ ggplot(df_clean, aes(x = log(carat), y = log(price))) +
   labs(title = "Log-Log vztah: Karáty vs Cena", x = "log(Karáty)", y = "log(Cena)")
 ```
 
-
 ```{r}
 #boxplot
 ggplot(df_clean, aes(x = cut, y = price, fill = cut)) +
-  geom_boxplot() +
+  geom_boxplot(alpha = 0.5) +
   theme_minimal() +
   labs(title = "Cena podle kvality řezu (Cut)", x = "Kvalita řezu", y = "Cena ($)") +
   theme(legend.position = "none")
 ```
+
+```{r}
+ggplot(data=df_clean, aes(x = color, y = price, fill = color)) +
+  geom_boxplot(alpha = 0.5) +
+  theme_minimal() +
+  labs(title = "Cena podle stupně zabarvení (Color)", x = "Stupeň zabarvení", y = "Cena ($)") +
+    theme(legend.position = "none")
+```
+
+- **D, E, F (Bezbarvé / Colorless):** Úplně čiré, průzračné kameny. Jsou nejvzácnější a nejdražší.
+
+- **G, H, I, J (Téměř bezbarvé / Near Colorless):** Mají velmi slabý nádech do žluta, který je ale pro laika, a často i bez lupy, prakticky nepostřehnutelný (zvlášť po zasazení do šperku).
+
+Proč jsou ale kameny s horším stupňem zabarvení dražší? Zkusme si to ukázat na dalším grafu.
+
+```{r}
+ggplot(df_clean, aes(x = color, y = carat, fill = color)) +
+  geom_boxplot(alpha = 0.5) +
+  theme_minimal() +
+  labs(title = "Váha podle zabarvení", x = "Stupeň zabarvení", y = "Váha diamantu (Carat)") +
+  theme(legend.position = "none")
+```
+
+Dále se podíváme na cenu diamantu, podle stupně čistoty.
+
+```{r}
+ggplot(data=df_clean, aes(x = clarity, y = price, fill = clarity)) +
+  geom_boxplot(alpha = 0.5) +
+  theme_minimal() + 
+  labs(title = "Cena podle čistoty (Clarity)", x = "Stupeň čistoty", y = "Cena ($)") +
+  theme(legend.position = "none")
+```
+
+- **I1 (Included 1)** – Inkluze jsou natolik výrazné, že jsou často **viditelné i pouhým okem** a mohou snižovat průhlednost nebo lesk kamene.
+
+- **SI1, SI2 (Slightly Included)** – Obsahují drobné inkluze, které jsou snadno viditelné pod 10× zvětšením (lupou), ale pro laika bývají **pouhým okem neviditelné**.
+
+- **VS1, VS2 (Very Slightly Included)** – Obsahují velmi drobné vady, které jsou pod **lupou** **obtížně viditelné**.
+
+- **VVS1, VVS2 (Very Very Slightly Included)** – Obsahují extrémně titěrné inkluze, které pod lupou **hledá i zkušený gemolog jen velmi těžko**.
+
+- **IF (Internally Flawless)** – Zcela **čisté uvnitř** – při 10× zvětšení nemají žádné vnitřní vady (mohou mít jen nepatrné stopy na povrchu).
 
 ```{r}
 num_vars <- df_clean %>% select(carat, depth, table, price, x, y, z)
@@ -125,7 +166,6 @@ corrplot(cor_matrix, method = "color", type = "upper",
          addCoef.col = "black", tl.col = "black", tl.srt = 45,
          number.cex = 0.7, title = "Korelační matice numerických proměnných", mar = c(0,0,1,0))
 ```
-
 
 ```{r}
 summary(lm(price ~ x + y + z, data=df_clean))
