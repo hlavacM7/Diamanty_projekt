@@ -96,7 +96,7 @@ ggplot(df_clean, aes(x = carat, y = price)) +
   geom_point(alpha = 0.2, color = "dodgerblue4") +
   geom_smooth(method = "loess", color = "red") +
   theme_minimal() +
-  labs(title = "Závislost ceny na počtu karátů", x = "Karáty", y = "Cena ($)")
+  labs(title = "Závislost ceny na váze", x = "Váha", y = "Cena ($)")
 
 # log 
 ggplot(df_clean, aes(x = log(carat), y = log(price))) +
