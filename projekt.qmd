@@ -174,6 +174,7 @@ ggpairs(pairplot_data, columns=c("price", "carat", "table", "x", "y", "z"),
         lower = list(continuous = wrap("points", alpha = 0.2, size = 0.6, color = "navy")),
         diag = list(continuous = wrap("densityDiag", alpha = 0.3, color = "steelblue"))) +
   theme_minimal() +
+  theme(strip.text = element_text(size = 14, face = "bold"), axis.text = element_text(size = 9)) + 
   labs(title = "Pairplot numerických proměnných")
 ```
 
