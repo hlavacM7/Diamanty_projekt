@@ -143,7 +143,7 @@ Dále se podíváme na cenu diamantu, podle stupně čistoty.
 ggplot(data=df_clean, aes(x = clarity, y = price, fill = clarity)) +
   geom_boxplot(alpha = 0.5) +
   theme_minimal() + 
-  labs(title = "Cena podle čistoty (Clarity)", x = "Stupeň čistoty", y = "Cena ($)") +
+  labs(title = "Cena podle čirosti (Clarity)", x = "Stupeň čirosti", y = "Cena ($)") +
   theme(legend.position = "none")
 ```
 
@@ -164,7 +164,17 @@ cor_matrix <- cor(num_vars)
 # Vykreslení korelačního diagramu
 corrplot(cor_matrix, method = "color", type = "upper", 
          addCoef.col = "black", tl.col = "black", tl.srt = 45,
-         number.cex = 0.7, title = "Korelační matice numerických proměnných", mar = c(0,0,1,0))
+         number.cex = 0.7, col = colorRampPalette(c("steelblue", "lightblue", "white", "orange", "red"))(200), title = "Korelační matice numerických proměnných", mar = c(0,0,1,0))
+```
+
+```{r}
+pairplot_data <- df_clean |> sample_n(1000) |> select(price, carat, clarity, table, x, y, z)
+ggpairs(pairplot_data, columns=c("price", "carat", "table", "x", "y", "z"),
+        upper = list(continuous = wrap("blank", size = 3)),
+        lower = list(continuous = wrap("points", alpha = 0.2, size = 0.6, color = "navy")),
+        diag = list(continuous = wrap("densityDiag", alpha = 0.3, color = "steelblue"))) +
+  theme_minimal() +
+  labs(title = "Pairplot klíčových proměnných (GGally)")
 ```
 
 ```{r}
