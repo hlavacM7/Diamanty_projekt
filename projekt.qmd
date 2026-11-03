@@ -111,16 +111,16 @@ ggplot(df_clean, aes(x = log(carat), y = log(price))) +
 ggplot(df_clean, aes(x = cut, y = price, fill = cut)) +
   geom_boxplot(alpha = 0.5) +
   theme_minimal() +
-  labs(title = "Cena podle kvality řezu (Cut)", x = "Kvalita řezu", y = "Cena ($)") +
-  theme(legend.position = "none")
+  theme(axis.text = element_text(size = 14, face = "bold"), legend.position = "none") +
+  labs(title = "Cena podle kvality řezu (Cut)", x = "Kvalita řezu", y = "Cena ($)")
 ```
 
 ```{r}
 ggplot(data=df_clean, aes(x = color, y = price, fill = color)) +
   geom_boxplot(alpha = 0.5) +
   theme_minimal() +
-  labs(title = "Cena podle stupně zabarvení (Color)", x = "Stupeň zabarvení", y = "Cena ($)") +
-    theme(legend.position = "none")
+  theme(axis.text = element_text(size = 14, face = "bold"), legend.position = "none") +
+  labs(title = "Cena podle stupně zabarvení (Color)", x = "Stupeň zabarvení", y = "Cena ($)")
 ```
 
 - **D, E, F (Bezbarvé / Colorless):** Úplně čiré, průzračné kameny. Jsou nejvzácnější a nejdražší.
@@ -133,8 +133,8 @@ Proč jsou ale kameny s horším stupňem zabarvení dražší? Zkusme si to uk�
 ggplot(df_clean, aes(x = color, y = carat, fill = color)) +
   geom_boxplot(alpha = 0.5) +
   theme_minimal() +
-  labs(title = "Váha podle zabarvení", x = "Stupeň zabarvení", y = "Váha diamantu (Carat)") +
-  theme(legend.position = "none")
+  theme(axis.text = element_text(size = 14, face = "bold"), legend.position = "none") +
+  labs(title = "Váha podle zabarvení", x = "Stupeň zabarvení", y = "Váha diamantu (Carat)")
 ```
 
 Dále se podíváme na cenu diamantu, podle stupně čistoty.
@@ -143,8 +143,8 @@ Dále se podíváme na cenu diamantu, podle stupně čistoty.
 ggplot(data=df_clean, aes(x = clarity, y = price, fill = clarity)) +
   geom_boxplot(alpha = 0.5) +
   theme_minimal() + 
-  labs(title = "Cena podle čirosti (Clarity)", x = "Stupeň čirosti", y = "Cena ($)") +
-  theme(legend.position = "none")
+  theme(axis.text = element_text(size = 14, face = "bold"), legend.position = "none") +
+  labs(title = "Cena podle čirosti (Clarity)", x = "Stupeň čirosti", y = "Cena ($)")
 ```
 
 - **I1 (Included 1)** – Inkluze jsou natolik výrazné, že jsou často **viditelné i pouhým okem** a mohou snižovat průhlednost nebo lesk kamene.
