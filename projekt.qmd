@@ -170,7 +170,7 @@ corrplot(cor_matrix, method = "color", type = "upper",
 ```{r}
 pairplot_data <- df_clean |> sample_n(1000) |> select(price, carat, clarity, table, x, y, z)
 ggpairs(pairplot_data, columns=c("price", "carat", "table", "x", "y", "z"),
-        upper = list(continuous = wrap("blank", size = 3)),
+        upper = list(continuous = wrap("points", alpha = 0.2, size = 0.6, color = "navy")),
         lower = list(continuous = wrap("points", alpha = 0.2, size = 0.6, color = "navy")),
         diag = list(continuous = wrap("densityDiag", alpha = 0.3, color = "steelblue"))) +
   theme_minimal() +
