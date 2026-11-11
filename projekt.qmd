@@ -181,3 +181,21 @@ ggpairs(pairplot_data, columns=c("price", "carat", "table", "x", "y", "z"),
 ```{r}
 summary(lm(price ~ x + y + z, data=df_clean))
 ```
+
+
+```{r}
+multi_model <- lm(price ~ carat + depth + table + cut + color + clarity + x + y + z, data = df_clean)
+
+# View the detailed results
+summary(multi_model)
+anova(multi_model)
+```
+
+
+```{r}
+multi_model <- lm(price ~ carat + depth + table + cut + color + clarity + x, data = df_clean)
+
+# View the detailed results
+summary(multi_model)
+anova(multi_model)
+```
