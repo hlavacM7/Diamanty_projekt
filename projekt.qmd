@@ -188,14 +188,17 @@ multi_model <- lm(price ~ carat + depth + table + cut + color + clarity + x + y 
 
 # View the detailed results
 summary(multi_model)
-anova(multi_model)
 ```
 
 
 ```{r}
-multi_model <- lm(price ~ carat + depth + table + cut + color + clarity + x, data = df_clean)
+multi_model <- lm(log(price) ~ carat + depth + table + cut + color + clarity, data = df_clean)
 
 # View the detailed results
 summary(multi_model)
-anova(multi_model)
+```
+
+
+```{r}
+carat_model <- lm(log(price) ~ carat, data = df_clean)
 ```
